@@ -1,0 +1,23 @@
+{
+    "name": "marcus-campos/maestro",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marcus Vinícius Campos",
+            "email": "marcus_vinicius_campos@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.3"
+    },
+    "autoload" : {
+        "psr-4": {
+            "Maestro\\": "src"
+        }
+    }
+}
