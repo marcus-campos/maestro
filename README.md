@@ -74,7 +74,7 @@ class Products extends Rest
 The master returns a `StdClass`, which gives you the freedom to treat the data the way you want. See the examples:
 
 
-The way of laravel
+The way of Laravel
 
 ```php
  public function getProducts()
@@ -91,7 +91,7 @@ The way of laravel
  }
 ```
 
-Object way
+Other way
 ```php
  public function postNotification()
  {
