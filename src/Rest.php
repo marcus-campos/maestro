@@ -141,8 +141,8 @@ class Rest
     /**
      * @return mixed
      */
-    public function all()
+    public function parse()
     {
-        return json_decode($this->response->getBody(), true);
+        return json_decode($this->response->getBody());
     }
 }
