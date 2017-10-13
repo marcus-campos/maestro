@@ -19,7 +19,6 @@ Or add manually to your composer.json:
 # Basic Usage
 
 ```php
-<?php
 
 <?php
 
