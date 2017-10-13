@@ -1,7 +1,20 @@
 # Maestro
 
-A light client built on [Guzzle] (http://docs.guzzlephp.org/en/latest/) that simplifies the way you work with micro-services. It is based on method definitions and parameters for your URLs. See usage below.
+A light client built on [Guzzle](http://docs.guzzlephp.org/en/latest/) that simplifies the way you work with micro-services. It is based on method definitions and parameters for your URLs.
 
+# Installation
+
+Composer way
+
+```
+composer require marcus-campos/maestro
+```
+
+Or add manually to your composer.json:
+
+```
+"marcus-campos/maestro": "dev-master"
+```
 
 # Basic Usage
 
@@ -114,7 +127,7 @@ Other way
 You can send in 2 ways: synchronous or asynchronous. See the examples:
 
 
-Synchronous: '->send(array headers, array body)'
+Synchronous: `->send(array headers, array body)`
 ```php
  public function getProducts()
  {
@@ -130,7 +143,7 @@ Synchronous: '->send(array headers, array body)'
  }
 ```
 
-Asynchronous: '->sendAsync(array headers, array body)'
+Asynchronous: `->sendAsync(array headers, array body)`
 ```php
  public function postNotification()
  {
@@ -149,10 +162,14 @@ Asynchronous: '->sendAsync(array headers, array body)'
  }
 ```
 
+
+
 ## Supported Methods
 
-- [x] GET
-- [x] POST
-- [x] PUT
-- [x] PATCH
-- [x] DELETE
+- [x] GET    `->get()`
+- [x] POST   `->post()`
+- [x] PUT    `->put()`
+- [x] PATCH  `->patch()`
+- [x] DELETE `->delete()`
+
+
