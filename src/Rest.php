@@ -18,6 +18,8 @@ class Rest
     private $method;
     private $response;
     private $assoc;
+    private $headers = [];
+    private $body = [];
 
     /**
      * @return string
@@ -99,29 +101,48 @@ class Rest
         $this->method = 'PATH';
         return $this;
     }
-
-    public function send(array $headers = [], array $body = [])
+    
+    /**
+     * @return $this
+     */
+    public function headers(array $headers)
+    {
+        $this->headers = $headers;
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function body(array $body)
+    {
+        $this->body = $body;
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function send()
     {
         $client = new Client();
         $request = new Request(
             $this->method,
             $this->url.$this->endPoint,
-            $headers,
-            json_encode($body)
+            $this->headers,
+            json_encode($this->body)
         );
         $this->response = $client->send($request);
         return $this;
     }
 
     /**
-     * @param array $headers
-     * @param array $body
      * @return $this
      */
-    public function sendAsync(array $headers = [], array $body = [])
+    public function sendAsync()
     {
         $client = new Client();
-        $request = new Request($this->method, $this->url.$this->endPoint, $headers, $body);
+        $request = new Request($this->method, $this->url.$this->endPoint, $this->headers, $this->body);
         $this->response = $promise = $client->sendAsync($request)->then(function ($response) {
             return $response;
         });
