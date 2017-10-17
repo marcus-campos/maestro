@@ -98,7 +98,7 @@ class Rest
      */
     public function patch()
     {
-        $this->method = 'PATH';
+        $this->method = 'PATCH';
         return $this;
     }
     
