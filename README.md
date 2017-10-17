@@ -1,3 +1,6 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/0c615c480aa201e6214f/maintainability)](https://codeclimate.com/github/marcus-campos/maestro/maintainability)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 # Maestro
 
 A light client built on [Guzzle](http://docs.guzzlephp.org/en/latest/) that simplifies the way you work with micro-services. It is based on method definitions and parameters for your URLs.
