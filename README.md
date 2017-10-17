@@ -40,11 +40,13 @@ class Products extends Rest
         return $this
             ->get()
             ->setEndPoint('products')
-            ->send([
+            ->headers([
                 'Content-Type' => 'application/json'
-            ], [
+            ])
+            ->body( [
                 'ids' => [1,2,3,4,5]
             ])
+            ->send()
             ->parse();
     }
 
@@ -68,12 +70,14 @@ class Products extends Rest
         return $this
             ->get()
             ->setEndPoint('package/')
-            ->sendAsync([
+            ->headers([
                 'Content-Type' => 'application/json'
-            ], [
+            ])
+            ->body([
                 'message' => 'Tanks for all.',
                 'id' => [1]
             ])
+            ->sendAsync()
             ->wait()
             ->parse()
             ->name;
@@ -94,11 +98,13 @@ The way of Laravel
      return collect($this
          ->get()
          ->setEndPoint('products')
-         ->send([
+         ->headers([
              'Content-Type' => 'application/json'
-         ], [
+         ])
+         ->body([
              'ids' => [1,2,3,4,5]
          ])
+         ->send()
          ->parse());
  }
 ```
@@ -110,12 +116,14 @@ Assoc way
      return $this
          ->get()
          ->setEndPoint('package/')
-         ->send([
+         ->headers([
              'Content-Type' => 'application/json'
-         ], [
+         ])
+         ->body([
              'message' => 'Tanks for all.',
              'id' => [1]
          ])
+         ->send()
          ->assoc()
          ->parse()
          ->name;
@@ -129,12 +137,14 @@ Other way
      return $this
          ->get()
          ->setEndPoint('package/')
-         ->sendAsync([
+         ->headers([
              'Content-Type' => 'application/json'
-         ], [
+         ])
+         ->body([
              'message' => 'Tanks for all.',
              'id' => [1]
          ])
+         ->sendAsync()
          ->wait()
          ->parse()
          ->name;
@@ -152,11 +162,13 @@ Synchronous: `->send(array headers, array body)`
      return collect($this
          ->get()
          ->setEndPoint('products')
-         ->send([
+         ->headers([
              'Content-Type' => 'application/json'
-         ], [
+         ])
+         ->body([
              'ids' => [1,2,3,4,5]
          ])
+         ->send()
          ->parse());
  }
 ```
@@ -168,12 +180,14 @@ Asynchronous: `->sendAsync(array headers, array body)`
      return $this
          ->get()
          ->setEndPoint('package/')
-         ->sendAsync([
+         ->headers([
              'Content-Type' => 'application/json'
-         ], [
+         ])
+         ->body([
              'message' => 'Tanks for all.',
              'id' => [1]
          ])
+         ->sendAsync()
          ->wait()
          ->parse()
          ->name;
