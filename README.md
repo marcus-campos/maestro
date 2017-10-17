@@ -103,6 +103,25 @@ The way of Laravel
  }
 ```
 
+Assoc way
+```php
+ public function postNotification()
+ {
+     return $this
+         ->get()
+         ->setEndPoint('package/')
+         ->send([
+             'Content-Type' => 'application/json'
+         ], [
+             'message' => 'Tanks for all.',
+             'id' => [1]
+         ])
+         ->assoc()
+         ->parse()
+         ->name;
+ }
+```
+
 Other way
 ```php
  public function postNotification()
