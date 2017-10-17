@@ -14,12 +14,10 @@ use GuzzleHttp\Psr7\Request;
 class Rest
 {
     protected $url;
-
     private $endPoint;
-
     private $method;
-
     private $response;
+    private $assoc;
 
     /**
      * @return string
@@ -143,6 +141,18 @@ class Rest
      */
     public function parse()
     {
-        return json_decode($this->response->getBody());
+        if($this->assoc == true)
+            return json_decode($this->response->getBody(), true);
+        else
+            return json_decode($this->response->getBody());
+    }
+    
+    /**
+     * @return $this
+     */
+    public function assoc()
+    {
+        $this->assoc = true;
+        return $this;
     }
 }
