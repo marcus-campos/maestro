@@ -90,7 +90,7 @@ class Products extends Rest
 
 # Response data
 
-The master returns a `StdClass`, which gives you the freedom to treat the data the way you want. See the examples:
+By default the returns is a `StdClass`, which gives you the freedom to treat the data the way you want. See the examples:
 
 
 The way of Laravel
@@ -98,7 +98,8 @@ The way of Laravel
 ```php
  public function getProducts()
  {
-     return collect($this
+     return collect(
+         $this
          ->get()
          ->setEndPoint('products')
          ->headers([
@@ -111,6 +112,8 @@ The way of Laravel
          ->parse());
  }
 ```
+
+You can choose assoc return.
 
 Assoc way
 ```php
