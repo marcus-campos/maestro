@@ -24,6 +24,15 @@ Or add manually to your composer.json:
 "marcus-campos/maestro": "dev-master"
 ```
 
+# Running the test suite
+
+## Using Docker
+
+```
+docker build -t maestro .
+docker run maestro
+```
+
 # Basic Usage
 
 ```php
@@ -31,7 +40,6 @@ Or add manually to your composer.json:
 <?php
 
 namespace App\Platform\V1\Domains\App;
-
 
 
 use Maestro\Rest;
