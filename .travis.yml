@@ -14,4 +14,5 @@ before_script:
   - composer install
 
 script:
+  - phpunit
   - phpunit --coverage-text
