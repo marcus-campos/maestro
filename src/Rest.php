@@ -18,7 +18,7 @@ class Rest
 
     protected $url;
     
-    protected $assoc;
+    protected $assoc = false;
     
     protected $headers = [];
     
