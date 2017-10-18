@@ -12,5 +12,5 @@ before_script:
   - docker build -t maestro .
 
 script:
-  - docker run maestro phpunit
-  - docker run maestro phpunit --coverage-text
+  - docker run maestro bash -c "./vendor/bin/phpunit"
+  - docker run maestro bash -c "./vendor/bin/phpunit --coverage-text"
