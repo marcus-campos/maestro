@@ -7,7 +7,6 @@
 
 namespace Maestro;
 
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Maestro\Http\Methods;
@@ -29,6 +28,16 @@ class Rest
     private $method;
     
     private $response;
+
+    
+    public function __construct($client = null)
+    {
+        if (!$client) {
+            $this->client = new Client();
+        } else {
+            $this->client = $client;
+        }
+    }
 
     /**
      * @return string
@@ -89,14 +98,24 @@ class Rest
      */
     public function send()
     {
-        $client = new Client();
-        $request = new Request(
-            $this->method,
-            $this->url.$this->endPoint,
-            $this->headers,
-            json_encode($this->body)
-        );
-        $this->response = $client->send($request);
+
+        // GET method doesn't send a BODY
+        if ($this->method === 'GET') {
+            $request = new Request(
+                $this->method,
+                $this->url.$this->endPoint,
+                $this->headers
+            );
+        } else {
+            $request = new Request(
+                $this->method,
+                $this->url.$this->endPoint,
+                $this->headers,
+                json_encode($this->body)
+            );
+        };
+
+        $this->response = $this->client->send($request);
         return $this;
     }
 
@@ -126,10 +145,11 @@ class Rest
      */
     public function parse()
     {
-        if($this->assoc == true)
+        if ($this->assoc == true) {
             return json_decode($this->response->getBody(), true);
-        else
+        } else {
             return json_decode($this->response->getBody());
+        }
     }
     
     /**
