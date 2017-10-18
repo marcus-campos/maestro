@@ -1,8 +1,7 @@
-language: php
-php:
-  - '7.1'
-  - hhvm
-  - nightly
+sudo: false
+
+services:
+  - docker
 
 matrix:
   allow_failures:
@@ -10,9 +9,8 @@ matrix:
     - php: nightly
 
 before_script:
-  - composer self-update
-  - composer install
+  - docker build -t maestro .
 
 script:
-  - phpunit
-  - phpunit --coverage-text
+  - docker run maestro phpunit
+  - docker run maestro phpunit --coverage-text
