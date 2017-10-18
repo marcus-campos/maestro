@@ -154,10 +154,10 @@ class Rest
     {
         $client = new Client();
         $request = new Request(
-        $this->method,
-        $this->url.$this->endPoint,
-        $this->headers,
-        $this->body
+            $this->method,
+            $this->url.$this->endPoint,
+            $this->headers,
+            $this->body
         );
 
         $this->response = $promise = $client->sendAsync($request)->then(function ($response) {
