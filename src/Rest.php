@@ -30,7 +30,7 @@ class Rest
     private $response;
 
     
-    public function __construct($client = false)
+    public function __construct($client = null)
     {
         $this->client = $client;
 
@@ -160,7 +160,7 @@ class Rest
             $this->body
         );
 
-        $this->response = $promise = $client->sendAsync($request)->then(function ($response) {
+        $this->response = $client->sendAsync($request)->then(function ($response) {
             return $response;
         });
 
