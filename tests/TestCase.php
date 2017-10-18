@@ -8,9 +8,7 @@
 
 namespace Maestro\Test;
 
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
-
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
 
 }
