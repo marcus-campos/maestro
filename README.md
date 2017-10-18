@@ -161,7 +161,7 @@ Other way
 You can send in 2 ways: synchronous or asynchronous. See the examples:
 
 
-Synchronous: `->send(array headers, array body)`
+Synchronous: `->send()`
 ```php
  public function getProducts()
  {
@@ -179,7 +179,7 @@ Synchronous: `->send(array headers, array body)`
  }
 ```
 
-Asynchronous: `->sendAsync(array headers, array body)`
+Asynchronous: `->sendAsync()`
 ```php
  public function postNotification()
  {
