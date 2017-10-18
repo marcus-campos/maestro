@@ -136,9 +136,9 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testGetRespone
+     * Method testGetResponse
      */
-    public function testGetRespone() : void
+    public function testGetResponse() : void
     {
         $expectedReturnValue = 1;
         $mock = \Mockery::mock(new Client);

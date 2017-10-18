@@ -30,12 +30,12 @@ class Rest
     private $response;
 
     
-    public function __construct($client = null)
+    public function __construct($client = false)
     {
+        $this->client = $client;
+
         if (!$client) {
             $this->client = new Client();
-        } else {
-            $this->client = $client;
         }
     }
 
@@ -126,20 +126,22 @@ class Rest
         }
 
         // GET method doesn't send a BODY
-        if ($this->method === 'GET') {
-            $request = new Request(
-                $this->method,
-                $this->url.$this->endPoint,
-                $this->headers
-            );
-        } else {
-            $request = new Request(
-                $this->method,
-                $this->url.$this->endPoint,
-                $this->headers,
-                $this->body
-            );
-        };
+        switch ($this->method) {
+            case ('GET'):
+                $request = new Request(
+                    $this->method,
+                    $this->url.$this->endPoint,
+                    $this->headers
+                );
+                break;
+            default:
+                $request = new Request(
+                    $this->method,
+                    $this->url.$this->endPoint,
+                    $this->headers,
+                    $this->body
+                );
+        }
 
         $this->response = $this->client->send($request);
         return $this;
@@ -151,10 +153,17 @@ class Rest
     public function sendAsync()
     {
         $client = new Client();
-        $request = new Request($this->method, $this->url.$this->endPoint, $this->headers, $this->body);
+        $request = new Request(
+        $this->method,
+        $this->url.$this->endPoint,
+        $this->headers,
+        $this->body
+        );
+
         $this->response = $promise = $client->sendAsync($request)->then(function ($response) {
             return $response;
         });
+
         return $this;
     }
 
@@ -173,9 +182,9 @@ class Rest
     {
         if ($this->assoc == true) {
             return json_decode($this->response->getBody(), true);
-        } else {
-            return json_decode($this->response->getBody());
         }
+
+        return json_decode($this->response->getBody());
     }
     
     /**
