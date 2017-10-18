@@ -14,6 +14,11 @@ RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60e
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 
+# Install PHPUnit
+RUN cd /tmp && curl https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
+    chmod +x phpunit.phar && \
+    mv /tmp/phpunit.phar /usr/local/bin/phpunit
+
 # Install reqs
 RUN ./composer.phar install
 
