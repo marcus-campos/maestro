@@ -67,6 +67,7 @@ class RestTest extends TestCase
         ];
 
         $this->assertInstanceOf(Rest::class, $this->restClass->headers($headers));
+        $this->assertSame($headers, $this->restClass->getHeaders());
     }
 
     /**
@@ -100,6 +101,30 @@ class RestTest extends TestCase
             ->setUrl($url)
             ->send()
             ->getResponse();
+
+        $this->assertSame('GET', $this->restClass->getMethod());
+    }
+
+    /**
+     * Method testSendNoMethod()
+     * Assert that the Rest API raises an exception
+     * when no method has been defined.
+     */
+    public function testSendNoMethod() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->restClass->send();
+    }
+
+    /**
+     * Method testSendNoUrl()
+     * Assert that the Rest API raises an exception
+     * when no url has been defined.
+     */
+    public function testSendNoUrl() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->restClass->get()->send();
     }
 
     /**
@@ -115,7 +140,22 @@ class RestTest extends TestCase
      */
     public function testGetRespone() : void
     {
-        $this->markTestIncomplete('To implement');
+        $expectedReturnValue = 1;
+        $mock = \Mockery::mock(new Client);
+        $mock->shouldReceive('send')
+            ->times(1)
+            ->andReturn($expectedReturnValue);
+
+        $this->restClass = new Rest($mock);
+
+        $url = 'https://www.google.com';
+        $response = $this->restClass
+            ->get()
+            ->setUrl($url)
+            ->send()
+            ->getResponse();
+
+        $this->assertSame($expectedReturnValue, $response);
     }
 
     /**
@@ -123,7 +163,22 @@ class RestTest extends TestCase
      */
     public function testParse() : void
     {
-        $this->markTestIncomplete('To implement');
+
+        $mock = \Mockery::mock(new Client);
+        $mock->shouldReceive('send')
+            ->times(1)
+            ->andReturn(new FakeResponse());
+
+        $this->restClass = new Rest($mock);
+
+        $url = 'https://www.google.com';
+        $parsedBody = $this->restClass
+            ->get()
+            ->setUrl($url)
+            ->send()
+            ->parse();
+
+        $this->assertEquals(json_decode(json_encode(['foo' => 'bar'])), $parsedBody);
     }
 
     /**

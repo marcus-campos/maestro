@@ -42,9 +42,25 @@ class Rest
     /**
      * @return string
      */
-    public function getUrl() :string
+    public function getUrl(): string
     {
         return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
     }
 
     /**
@@ -89,7 +105,12 @@ class Rest
      */
     public function body(array $body)
     {
-        $this->body = $body;
+        try {
+            $this->body = json_encode($body);
+        } catch (Exception $e) {
+            $this->body = $body;
+        }
+
         return $this;
     }
     
@@ -98,6 +119,11 @@ class Rest
      */
     public function send()
     {
+        if (!$this->method) {
+            throw new \InvalidArgumentException('No method defined');
+        } elseif (!$this->url) {
+            throw new \InvalidArgumentException('No url defined');
+        }
 
         // GET method doesn't send a BODY
         if ($this->method === 'GET') {
@@ -111,7 +137,7 @@ class Rest
                 $this->method,
                 $this->url.$this->endPoint,
                 $this->headers,
-                json_encode($this->body)
+                $this->body
             );
         };
 
