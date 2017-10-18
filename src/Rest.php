@@ -101,7 +101,97 @@ class Rest
         $this->method = 'PATCH';
         return $this;
     }
+
+    /**
+     * @return $this
+     */
+    public function copy()
+    {
+        $this->method = 'COPY';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function head()
+    {
+        $this->method = 'HEAD';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function options()
+    {
+        $this->method = 'OPTIONS';
+        return $this;
+    }    
     
+    /**
+     * @return $this
+     */
+    public function link()
+    {
+        $this->method = 'LINK';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function unlink()
+    {
+        $this->method = 'UNLINK';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function purge()
+    {
+        $this->method = 'PURGE';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function lock()
+    {
+        $this->method = 'LOCK';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function unlock()
+    {
+        $this->method = 'UNLOCK';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function propfind()
+    {
+        $this->method = 'PROPFIND';
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function view()
+    {
+        $this->method = 'VIEW';
+        return $this;
+    }
+
     /**
      * @return $this
      */
