@@ -17,12 +17,18 @@ class Rest
     use Methods;
 
     protected $url;
-    private $endPoint;
-    private $method;
-    private $response;
-    private $assoc;
-    private $headers = [];
+    
+    protected $assoc;
+    
+    protected $headers = [];
+    
     private $body = [];
+    
+    private $endPoint;
+    
+    private $method;
+    
+    private $response;
 
     /**
      * @return string
