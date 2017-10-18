@@ -214,5 +214,15 @@ Asynchronous: `->sendAsync()`
 - [x] PUT    `->put()`
 - [x] PATCH  `->patch()`
 - [x] DELETE `->delete()`
+- [x] COPY `->copy()`
+- [x] HEAD `->head()`
+- [x] OPTIONS `->options()`
+- [x] LINK `->link()`
+- [x] UNLINK `->unlink()`
+- [x] PURGE `->purge()`
+- [x] LOCK `->lock()`
+- [x] UNLOCK `->unlock()`
+- [x] PROPFIND `->propfind()`
+- [x] VIEW `->view()`
 
 
