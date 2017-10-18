@@ -9,13 +9,15 @@
 namespace Maestro\Test;
 
 use Maestro\Rest;
+use GuzzleHttp\Client;
+use Mockery;
 
 class RestTest extends TestCase
 {
     /**
      * @var
      */
-    protected  $restClass;
+    protected $restClass;
 
     /**
      * Method setUp
@@ -80,11 +82,24 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testSend
+     * Method testSendGet()
+     * Assert that the GuzzleClient forwards the request
      */
-    public function testSend() : void
+    public function testSendGet() : void
     {
-        $this->markTestIncomplete('To implement');
+        $url = 'https://www.google.com';
+        $mock = \Mockery::mock(new Client);
+        $mock->shouldReceive('send')
+            ->times(1);
+
+        $this->restClass = new Rest($mock);
+
+        $url = 'https://www.google.com';
+        $response = $this->restClass
+            ->get()
+            ->setUrl($url)
+            ->send()
+            ->getResponse();
     }
 
     /**
@@ -118,6 +133,4 @@ class RestTest extends TestCase
     {
         $this->assertInstanceOf(Rest::class, $this->restClass->assoc());
     }
-
-
 }
