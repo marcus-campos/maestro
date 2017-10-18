@@ -5,6 +5,11 @@
 
 A light client built on [Guzzle](http://docs.guzzlephp.org/en/latest/) that simplifies the way you work with micro-services. It is based on method definitions and parameters for your URLs.
 
+# Requirements
+
+* PHP 7.1 or greater
+* Composer
+
 # Installation
 
 Composer way
