@@ -1,4 +1,4 @@
-[![StyleCI](https://styleci.io/repos/106752684/shield?branch=master)](https://styleci.io/repos/106752684)[![Maintainability](https://api.codeclimate.com/v1/badges/0c615c480aa201e6214f/maintainability)](https://codeclimate.com/github/marcus-campos/maestro/maintainability)
+[![StyleCI](https://styleci.io/repos/106752684/shield?branch=master)](https://styleci.io/repos/106752684) [![Maintainability](https://api.codeclimate.com/v1/badges/0c615c480aa201e6214f/maintainability)](https://codeclimate.com/github/marcus-campos/maestro/maintainability)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 # Maestro
