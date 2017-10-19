@@ -3,14 +3,13 @@
  * Created by PhpStorm.
  * User: martin
  * Date: 10/18/2017
- * Time: 7:52 PM
+ * Time: 7:52 PM.
  */
 
 namespace Maestro\Test;
 
-use Maestro\Rest;
 use GuzzleHttp\Client;
-use Mockery;
+use Maestro\Rest;
 
 class RestTest extends TestCase
 {
@@ -20,7 +19,7 @@ class RestTest extends TestCase
     protected $restClass;
 
     /**
-     * Method setUp
+     * Method setUp.
      */
     protected function setUp()
     {
@@ -30,7 +29,7 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testValidRestClass
+     * Method testValidRestClass.
      */
     public function testValidRestClass() : void
     {
@@ -38,7 +37,7 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testGetSetUrl
+     * Method testGetSetUrl.
      */
     public function testGetSetUrl() : void
     {
@@ -48,7 +47,7 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testGetSetEndpoint
+     * Method testGetSetEndpoint.
      */
     public function testGetSetEndpoint() : void
     {
@@ -58,12 +57,12 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testHeaders
+     * Method testHeaders.
      */
     public function testHeaders() : void
     {
         $headers = [
-            'http'
+            'http',
         ];
 
         $this->assertInstanceOf(Rest::class, $this->restClass->headers($headers));
@@ -71,12 +70,12 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testBody
+     * Method testBody.
      */
     public function testBody() : void
     {
         $body = [
-            'body'
+            'body',
         ];
 
         $this->assertInstanceOf(Rest::class, $this->restClass->body($body));
@@ -84,12 +83,12 @@ class RestTest extends TestCase
 
     /**
      * Method testSendGet()
-     * Assert that the GuzzleClient forwards the request
+     * Assert that the GuzzleClient forwards the request.
      */
     public function testSendGet() : void
     {
         $url = 'https://www.google.com';
-        $mock = \Mockery::mock(new Client);
+        $mock = \Mockery::mock(new Client());
         $mock->shouldReceive('send')
             ->times(1);
 
@@ -128,7 +127,7 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testSendAsync
+     * Method testSendAsync.
      */
     public function testSendAsync() : void
     {
@@ -136,12 +135,12 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testGetResponse
+     * Method testGetResponse.
      */
     public function testGetResponse() : void
     {
         $expectedReturnValue = 1;
-        $mock = \Mockery::mock(new Client);
+        $mock = \Mockery::mock(new Client());
         $mock->shouldReceive('send')
             ->times(1)
             ->andReturn($expectedReturnValue);
@@ -159,12 +158,11 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testParse
+     * Method testParse.
      */
     public function testParse() : void
     {
-
-        $mock = \Mockery::mock(new Client);
+        $mock = \Mockery::mock(new Client());
         $mock->shouldReceive('send')
             ->times(1)
             ->andReturn(new FakeResponse());
@@ -182,7 +180,7 @@ class RestTest extends TestCase
     }
 
     /**
-     * Method testAssoc
+     * Method testAssoc.
      */
     public function testAssoc() : void
     {

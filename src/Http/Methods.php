@@ -3,7 +3,7 @@
 /**
  * User: marcus-campos
  * Date: 18/10/17
- * Time: 14:24
+ * Time: 14:24.
  */
 
 namespace Maestro\Http;
@@ -16,6 +16,7 @@ trait Methods
     public function get()
     {
         $this->method = 'GET';
+
         return $this;
     }
 
@@ -25,6 +26,7 @@ trait Methods
     public function post()
     {
         $this->method = 'POST';
+
         return $this;
     }
 
@@ -34,6 +36,7 @@ trait Methods
     public function put()
     {
         $this->method = 'PUT';
+
         return $this;
     }
 
@@ -43,6 +46,7 @@ trait Methods
     public function delete()
     {
         $this->method = 'DELETE';
+
         return $this;
     }
 
@@ -52,6 +56,7 @@ trait Methods
     public function patch()
     {
         $this->method = 'PATCH';
+
         return $this;
     }
 
@@ -61,6 +66,7 @@ trait Methods
     public function copy()
     {
         $this->method = 'COPY';
+
         return $this;
     }
 
@@ -70,6 +76,7 @@ trait Methods
     public function head()
     {
         $this->method = 'HEAD';
+
         return $this;
     }
 
@@ -79,6 +86,7 @@ trait Methods
     public function options()
     {
         $this->method = 'OPTIONS';
+
         return $this;
     }
 
@@ -88,6 +96,7 @@ trait Methods
     public function link()
     {
         $this->method = 'LINK';
+
         return $this;
     }
 
@@ -97,6 +106,7 @@ trait Methods
     public function unlink()
     {
         $this->method = 'UNLINK';
+
         return $this;
     }
 
@@ -106,6 +116,7 @@ trait Methods
     public function purge()
     {
         $this->method = 'PURGE';
+
         return $this;
     }
 
@@ -115,6 +126,7 @@ trait Methods
     public function lock()
     {
         $this->method = 'LOCK';
+
         return $this;
     }
 
@@ -124,6 +136,7 @@ trait Methods
     public function unlock()
     {
         $this->method = 'UNLOCK';
+
         return $this;
     }
 
@@ -133,6 +146,7 @@ trait Methods
     public function propfind()
     {
         $this->method = 'PROPFIND';
+
         return $this;
     }
 
@@ -142,6 +156,7 @@ trait Methods
     public function view()
     {
         $this->method = 'VIEW';
+
         return $this;
     }
 }
