@@ -7,7 +7,7 @@ A light client built on [Guzzle](http://docs.guzzlephp.org/en/latest/) that simp
 
 # Requirements
 
-* PHP 7.1 or greater
+* PHP 7.0 or greater
 * Composer
 
 # Installation
