@@ -170,6 +170,28 @@ Other way
  }
 ```
 
+# Response Caching
+
+If the response of the microservice is likely to remain the same for periods of time, you may want to be polite and reduce requests to the service by caching the responses. This is also useful if the service imposes a request limit and you do not want to breach it with unnecessary calls.
+
+You can enable caching using the `->cachable()` method which accepts a period of time in seconds as it's only parameter. The following example will hold the response for 60 seconds before making the request again:
+
+```php
+$request = new \Maestro\Rest();
+
+$result = $request
+    ->get()
+    ->setUrl('http://api.example.com')
+    ->setEndPoint('/horses')
+    ->cachable(60)
+    ->send()
+    ->parse();
+```
+
+Caching functionality is dependent on the PHP package, [APCu](https://pecl.php.net/package/APCu) being installed and enabled in the environment.
+
+_Note: If you are developing and accidentally cache a bad response for a long period of time, simply make a request with `->cachable(0)` to overwrite previous caches._
+
 ## Senders
 You can send in 2 ways: synchronous or asynchronous. See the examples:
 

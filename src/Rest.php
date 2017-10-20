@@ -15,7 +15,7 @@ use Maestro\Http\Methods;
 
 class Rest
 {
-    use Methods;
+    use Methods, CachingGetters;
 
     protected $url;
 
@@ -30,6 +30,18 @@ class Rest
     private $response;
 
     private $client;
+
+    /** {boolean} Indicates if caching is turned on */
+    protected $cachingEnabled = false;
+
+    /** {string} The response body as a string to make it cachable */
+    protected $responseBody;
+
+    /** {number} Time responses will be cached for (if caching is enabled) */
+    protected $cacheTime = 60;
+
+    /** {string} Used by APCu */
+    protected $cacheKey = '';
 
     public function __construct($client = null)
     {
@@ -129,9 +141,77 @@ class Rest
     }
 
     /**
+     * Turns on caching of response body for given time.
+     *
+     * @param {number} $time - Shelf-life of cached response in seconds
+     *
+     * @return $this
+     */
+    public function cachable(int $time = 60)
+    {
+        if ($this->method == 'POST') {
+            throw new \InvalidArgumentException('Enabling caching is disabled for POST requests');
+        }
+        $this->cachingEnabled = true;
+        $this->cacheTime = $time;
+
+        return $this;
+    }
+
+    /**
+     * Either sends the request or fetches a cached response body dependent on if caching is enabled.
+     *
      * @return $this
      */
     public function send()
+    {
+        if ($this->cachingEnabled) {
+            return $this->fetchCachedIfExists();
+        }
+
+        // Set the response from a Client Request
+        return $this->sendRequest();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function fetchCachedIfExists()
+    {
+        // Generate a key to use for caching
+        $this->cacheKey = md5($this->url.$this->endPoint);
+
+        // Set the response from APCu cache
+        if (apcu_exists($this->cacheKey)) {
+            $batch = apcu_fetch($this->cacheKey);
+            // Check that expiry date is after now but also check that it is before our current cache time
+            // just incase a cache has been created by a previous request with a longer cache time.
+            if ($batch['expires'] > time() && $batch['expires'] < $this->makeCacheExpiryTime()) {
+                $this->responseBody = $batch['responseBody'];
+
+                return $this;
+            }
+
+            return $this->sendRequest();
+        }
+
+        return $this->sendRequest();
+    }
+
+    /**
+     * @return int
+     */
+    private function makeCacheExpiryTime()
+    {
+        return time() + $this->cacheTime;
+    }
+
+    /**
+     * Sends the request and caches the response is caching is enabled.
+     *
+     * @return $this
+     */
+    private function sendRequest()
     {
         if (!$this->method) {
             throw new \InvalidArgumentException('No method defined');
@@ -159,7 +239,24 @@ class Rest
 
         $this->response = $this->client->send($request);
 
+        $this->cacheResponseBody();
+
         return $this;
+    }
+
+    private function cacheResponseBody()
+    {
+        if (method_exists($this->response, 'getBody')) {
+            $this->responseBody = (string) $this->response->getBody();
+        }
+
+        if ($this->cachingEnabled && $this->response->getReasonPhrase() == 'OK') {
+            $batch = [
+                'expires'      => $this->makeCacheExpiryTime(),
+                'responseBody' => $this->responseBody,
+            ];
+            apcu_store($this->cacheKey, $batch);
+        }
     }
 
     /**
@@ -201,10 +298,10 @@ class Rest
     public function parse()
     {
         if ($this->assoc == true) {
-            return json_decode($this->response->getBody(), true);
+            return json_decode($this->responseBody, true);
         }
 
-        return json_decode($this->response->getBody());
+        return json_decode($this->responseBody);
     }
 
     /**
