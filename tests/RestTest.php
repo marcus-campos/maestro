@@ -31,7 +31,7 @@ class RestTest extends TestCase
     /**
      * Method testValidRestClass.
      */
-    public function testValidRestClass() : void
+    public function testValidRestClass()
     {
         $this->assertInstanceOf(Rest::class, $this->restClass);
     }
@@ -39,7 +39,7 @@ class RestTest extends TestCase
     /**
      * Method testGetSetUrl.
      */
-    public function testGetSetUrl() : void
+    public function testGetSetUrl()
     {
         $url = 'http://localhost';
         $this->assertInstanceOf(Rest::class, $this->restClass->setUrl($url));
@@ -49,7 +49,7 @@ class RestTest extends TestCase
     /**
      * Method testGetSetEndpoint.
      */
-    public function testGetSetEndpoint() : void
+    public function testGetSetEndpoint()
     {
         $endpoint = 'endpoint';
         $this->assertInstanceOf(Rest::class, $this->restClass->setEndpoint($endpoint));
@@ -59,7 +59,7 @@ class RestTest extends TestCase
     /**
      * Method testHeaders.
      */
-    public function testHeaders() : void
+    public function testHeaders()
     {
         $headers = [
             'http',
@@ -72,7 +72,7 @@ class RestTest extends TestCase
     /**
      * Method testBody.
      */
-    public function testBody() : void
+    public function testBody()
     {
         $body = [
             'body',
@@ -85,7 +85,7 @@ class RestTest extends TestCase
      * Method testSendGet()
      * Assert that the GuzzleClient forwards the request.
      */
-    public function testSendGet() : void
+    public function testSendGet()
     {
         $url = 'https://www.google.com';
         $mock = \Mockery::mock(new Client());
@@ -109,7 +109,7 @@ class RestTest extends TestCase
      * Assert that the Rest API raises an exception
      * when no method has been defined.
      */
-    public function testSendNoMethod() : void
+    public function testSendNoMethod()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->restClass->send();
@@ -120,7 +120,7 @@ class RestTest extends TestCase
      * Assert that the Rest API raises an exception
      * when no url has been defined.
      */
-    public function testSendNoUrl() : void
+    public function testSendNoUrl()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->restClass->get()->send();
@@ -129,7 +129,7 @@ class RestTest extends TestCase
     /**
      * Method testSendAsync.
      */
-    public function testSendAsync() : void
+    public function testSendAsync()
     {
         $this->markTestIncomplete('To implement');
     }
@@ -137,7 +137,7 @@ class RestTest extends TestCase
     /**
      * Method testGetResponse.
      */
-    public function testGetResponse() : void
+    public function testGetResponse()
     {
         $expectedReturnValue = 1;
         $mock = \Mockery::mock(new Client());
@@ -160,7 +160,7 @@ class RestTest extends TestCase
     /**
      * Method testParse.
      */
-    public function testParse() : void
+    public function testParse()
     {
         $mock = \Mockery::mock(new Client());
         $mock->shouldReceive('send')
@@ -182,8 +182,45 @@ class RestTest extends TestCase
     /**
      * Method testAssoc.
      */
-    public function testAssoc() : void
+    public function testAssoc()
     {
         $this->assertInstanceOf(Rest::class, $this->restClass->assoc());
+    }
+
+    public function testNotCachableByDefault()
+    {
+        $result = $this->restClass->get()
+                    ->setUrl('http://api.example.com')
+                    ->setEndPoint('/horses')
+                    ->getCachingEnabled();
+
+        $this->assertFalse($result);
+    }
+
+    public function testCachable()
+    {
+        $result = $this->restClass->get()
+                    ->setUrl('http://api.example.com')
+                    ->setEndPoint('/horses')
+                    ->cachable(60)
+                    ->getCachingEnabled();
+
+        $this->assertTrue($result);
+    }
+
+    public function testSetCacheTime()
+    {
+        $result = $this->restClass->get()
+                    ->cachable(360)
+                    ->getCacheTime();
+
+        $this->assertEquals($result, 360);
+    }
+
+    public function testPostRequestsNotCachable()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $rest = new Rest();
+        $result = $rest->post()->cachable(60);
     }
 }
