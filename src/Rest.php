@@ -40,7 +40,6 @@ class Rest
         }
     }
 
-
     /**
      * @param $client
      */
@@ -48,6 +47,7 @@ class Rest
     {
         $this->client = $client;
     }
+
     /**
      * @return string
      */
@@ -183,6 +183,7 @@ class Rest
         });
 
         $curl->tick();
+
         return $this;
     }
 
