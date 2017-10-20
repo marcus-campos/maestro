@@ -2,7 +2,7 @@
 /**
  * User: marcus-campos
  * Date: 02/10/17
- * Time: 10:31
+ * Time: 10:31.
  */
 
 namespace Maestro;
@@ -31,7 +31,6 @@ class Rest
 
     private $response;
 
-
     public function __construct($client = null)
     {
         $this->client = $client;
@@ -48,6 +47,7 @@ class Rest
     {
         $this->client = $client;
     }
+
     /**
      * @return string
      */
@@ -74,11 +74,13 @@ class Rest
 
     /**
      * @param string $url
+     *
      * @return $this
      */
     public function setUrl(string $url)
     {
         $this->url = $url;
+
         return $this;
     }
 
@@ -92,11 +94,13 @@ class Rest
 
     /**
      * @param string $endPoint
+     *
      * @return $this
      */
     public function setEndPoint(string $endPoint)
     {
         $this->endPoint = $endPoint;
+
         return $this;
     }
 
@@ -106,6 +110,7 @@ class Rest
     public function headers(array $headers)
     {
         $this->headers = $headers;
+
         return $this;
     }
 
@@ -136,7 +141,7 @@ class Rest
 
         // GET method doesn't send a BODY
         switch ($this->method) {
-            case ('GET'):
+            case 'GET':
                 $request = new Request(
                     $this->method,
                     $this->url.$this->endPoint,
@@ -153,6 +158,7 @@ class Rest
         }
 
         $this->response = $this->client->send($request);
+
         return $this;
     }
 
@@ -177,6 +183,7 @@ class Rest
         });
 
         $curl->tick();
+
         return $this;
     }
 
@@ -206,6 +213,7 @@ class Rest
     public function assoc()
     {
         $this->assoc = true;
+
         return $this;
     }
 }
