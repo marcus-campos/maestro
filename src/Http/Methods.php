@@ -10,6 +10,8 @@ namespace Maestro\Http;
 
 trait Methods
 {
+    private $method;
+
     /**
      * @return $this
      */

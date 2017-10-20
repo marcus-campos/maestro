@@ -8,6 +8,8 @@
 namespace Maestro;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlMultiHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Maestro\Http\Methods;
 
@@ -25,19 +27,27 @@ class Rest
 
     private $endPoint;
 
-    private $method;
-
     private $response;
+
+    private $client;
 
     public function __construct($client = null)
     {
         $this->client = $client;
 
         if (!$client) {
-            $this->client = new Client();
+            $this->setClient((new Client()));
         }
     }
 
+
+    /**
+     * @param $client
+     */
+    private function setClient($client)
+    {
+        $this->client = $client;
+    }
     /**
      * @return string
      */
@@ -157,7 +167,10 @@ class Rest
      */
     public function sendAsync()
     {
-        $client = new Client();
+        $curl = new CurlMultiHandler();
+        $handler = HandlerStack::create($curl);
+        $this->setClient((new Client(['handler' => $handler])));
+
         $request = new Request(
             $this->method,
             $this->url.$this->endPoint,
@@ -165,10 +178,11 @@ class Rest
             $this->body
         );
 
-        $this->response = $client->sendAsync($request)->then(function ($response) {
+        $this->response = $this->client->sendAsync($request)->then(function ($response) {
             return $response;
         });
 
+        $curl->tick();
         return $this;
     }
 
