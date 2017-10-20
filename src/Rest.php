@@ -2,12 +2,14 @@
 /**
  * User: marcus-campos
  * Date: 02/10/17
- * Time: 10:31.
+ * Time: 10:31
  */
 
 namespace Maestro;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlMultiHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Maestro\Http\Methods;
 
@@ -25,19 +27,27 @@ class Rest
 
     private $endPoint;
 
-    private $method;
+    private $client;
 
     private $response;
+
 
     public function __construct($client = null)
     {
         $this->client = $client;
 
         if (!$client) {
-            $this->client = new Client();
+            $this->setClient((new Client()));
         }
     }
 
+    /**
+     * @param $client
+     */
+    private function setClient($client)
+    {
+        $this->client = $client;
+    }
     /**
      * @return string
      */
@@ -64,13 +74,11 @@ class Rest
 
     /**
      * @param string $url
-     *
      * @return $this
      */
     public function setUrl(string $url)
     {
         $this->url = $url;
-
         return $this;
     }
 
@@ -84,13 +92,11 @@ class Rest
 
     /**
      * @param string $endPoint
-     *
      * @return $this
      */
     public function setEndPoint(string $endPoint)
     {
         $this->endPoint = $endPoint;
-
         return $this;
     }
 
@@ -100,7 +106,6 @@ class Rest
     public function headers(array $headers)
     {
         $this->headers = $headers;
-
         return $this;
     }
 
@@ -111,7 +116,7 @@ class Rest
     {
         try {
             $this->body = json_encode($body);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->body = $body;
         }
 
@@ -131,7 +136,7 @@ class Rest
 
         // GET method doesn't send a BODY
         switch ($this->method) {
-            case 'GET':
+            case ('GET'):
                 $request = new Request(
                     $this->method,
                     $this->url.$this->endPoint,
@@ -148,7 +153,6 @@ class Rest
         }
 
         $this->response = $this->client->send($request);
-
         return $this;
     }
 
@@ -157,7 +161,10 @@ class Rest
      */
     public function sendAsync()
     {
-        $client = new Client();
+        $curl = new CurlMultiHandler();
+        $handler = HandlerStack::create($curl);
+        $this->setClient((new Client(['handler' => $handler])));
+
         $request = new Request(
             $this->method,
             $this->url.$this->endPoint,
@@ -165,10 +172,11 @@ class Rest
             $this->body
         );
 
-        $this->response = $client->sendAsync($request)->then(function ($response) {
+        $this->response = $this->client->sendAsync($request)->then(function ($response) {
             return $response;
         });
 
+        $curl->tick();
         return $this;
     }
 
@@ -198,7 +206,6 @@ class Rest
     public function assoc()
     {
         $this->assoc = true;
-
         return $this;
     }
 }
