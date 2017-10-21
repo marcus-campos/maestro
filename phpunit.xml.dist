@@ -1,0 +1,19 @@
+<phpunit
+        colors="never"
+        bootstrap="./tests/bootstrap.php"
+>
+    <testsuites>
+        <testsuite name="Rest">
+            <file>tests/RestTest.php</file>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <blacklist>
+            <directory>vendor</directory>
+            <directory>tests</directory>
+        </blacklist>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
