@@ -11,6 +11,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use Maestro\Exceptions\NoMethodException;
+use Maestro\Exceptions\NoUrlException;
+use Maestro\Exceptions\PostCachingException;
 use Maestro\Http\Methods;
 
 class Rest
@@ -27,8 +30,10 @@ class Rest
 
     private $endPoint;
 
+    /** @var \Psr\Http\Message\ResponseInterface */
     private $response;
 
+    /** @var Client */
     private $client;
 
     /** {boolean} Indicates if caching is turned on */
@@ -41,14 +46,14 @@ class Rest
     protected $cacheTime = 60;
 
     /** {string} Used by APCu */
-    protected $cacheKey = '';
+    private $cacheKey = '';
 
     public function __construct($client = null)
     {
         $this->client = $client;
 
         if (!$client) {
-            $this->setClient((new Client()));
+            $this->setClient(new Client());
         }
     }
 
@@ -115,8 +120,10 @@ class Rest
 
         return $this;
     }
-
+    
     /**
+     * @param array $headers
+     *
      * @return $this
      */
     public function headers(array $headers)
@@ -125,43 +132,48 @@ class Rest
 
         return $this;
     }
-
+    
     /**
+     * @param array $body
+     *
      * @return $this
      */
     public function body(array $body)
     {
         try {
-            $this->body = json_encode($body);
-        } catch (Exception $e) {
+            $this->body = \GuzzleHttp\json_encode($body);
+        } catch (\InvalidArgumentException $e) {
             $this->body = $body;
         }
 
         return $this;
     }
-
+    
     /**
      * Turns on caching of response body for given time.
      *
-     * @param {number} $time - Shelf-life of cached response in seconds
+     * @param int $time - Shelf-life of cached response in seconds
      *
      * @return $this
+     * @throws \Maestro\Exceptions\PostCachingException
      */
     public function cachable(int $time = 60)
     {
-        if ($this->method == 'POST') {
-            throw new \InvalidArgumentException('Enabling caching is disabled for POST requests');
+        if ($this->method === 'POST') {
+            throw new PostCachingException();
         }
         $this->cachingEnabled = true;
         $this->cacheTime = $time;
 
         return $this;
     }
-
+    
     /**
      * Either sends the request or fetches a cached response body dependent on if caching is enabled.
      *
      * @return $this
+     * @throws \Maestro\Exceptions\NoUrlException
+     * @throws \Maestro\Exceptions\NoMethodException
      */
     public function send()
     {
@@ -172,9 +184,11 @@ class Rest
         // Set the response from a Client Request
         return $this->sendRequest();
     }
-
+    
     /**
      * @return mixed
+     * @throws \Maestro\Exceptions\NoUrlException
+     * @throws \Maestro\Exceptions\NoMethodException
      */
     private function fetchCachedIfExists()
     {
@@ -191,8 +205,6 @@ class Rest
 
                 return $this;
             }
-
-            return $this->sendRequest();
         }
 
         return $this->sendRequest();
@@ -201,41 +213,36 @@ class Rest
     /**
      * @return int
      */
-    private function makeCacheExpiryTime()
+    private function makeCacheExpiryTime() : int
     {
         return time() + $this->cacheTime;
     }
-
+    
     /**
      * Sends the request and caches the response is caching is enabled.
      *
      * @return $this
+     * @throws \Maestro\Exceptions\NoUrlException
+     * @throws \Maestro\Exceptions\NoMethodException
      */
     private function sendRequest()
     {
         if (!$this->method) {
-            throw new \InvalidArgumentException('No method defined');
-        } elseif (!$this->url) {
-            throw new \InvalidArgumentException('No url defined');
+            throw new NoMethodException();
         }
-
+    
+        if (!$this->url) {
+            throw new NoUrlException();
+        }
+    
         // GET method doesn't send a BODY
-        switch ($this->method) {
-            case 'GET':
-                $request = new Request(
-                    $this->method,
-                    $this->url.$this->endPoint,
-                    $this->headers
-                );
-                break;
-            default:
-                $request = new Request(
-                    $this->method,
-                    $this->url.$this->endPoint,
-                    $this->headers,
-                    $this->body
-                );
+        $paramsToSend = [$this->method, $this->url.$this->endPoint];
+        
+        if ($this->method !== 'GET') {
+            $paramsToSend[] = $this->body;
         }
+        
+        $request = new Request(...$paramsToSend);
 
         $this->response = $this->client->send($request);
 
@@ -250,7 +257,7 @@ class Rest
             $this->responseBody = (string) $this->response->getBody();
         }
 
-        if ($this->cachingEnabled && $this->response->getReasonPhrase() == 'OK') {
+        if ($this->cachingEnabled && $this->response->getReasonPhrase() === 'OK') {
             $batch = [
                 'expires'      => $this->makeCacheExpiryTime(),
                 'responseBody' => $this->responseBody,
@@ -266,7 +273,7 @@ class Rest
     {
         $curl = new CurlMultiHandler();
         $handler = HandlerStack::create($curl);
-        $this->setClient((new Client(['handler' => $handler])));
+        $this->setClient(new Client(['handler' => $handler]));
 
         $request = new Request(
             $this->method,
@@ -297,7 +304,7 @@ class Rest
      */
     public function parse()
     {
-        if ($this->assoc == true) {
+        if ($this->assoc === true) {
             return json_decode($this->responseBody, true);
         }
 
