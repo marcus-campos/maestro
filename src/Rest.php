@@ -31,32 +31,32 @@ class Rest
     private $endPoint;
 
     /**
-     * @var \Psr\Http\Message\ResponseInterface 
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
 
     /**
-     * @var Client 
+     * @var Client
      */
     private $client;
 
     /**
-     * {boolean} Indicates if caching is turned on 
+     * {boolean} Indicates if caching is turned on.
      */
     protected $cachingEnabled = false;
 
     /**
-     * {string} The response body as a string to make it cachable 
+     * {string} The response body as a string to make it cachable.
      */
     protected $responseBody;
 
     /**
-     * {number} Time responses will be cached for (if caching is enabled) 
+     * {number} Time responses will be cached for (if caching is enabled).
      */
     protected $cacheTime = 60;
 
     /**
-     * {string} Used by APCu 
+     * {string} Used by APCu.
      */
     private $cacheKey = '';
 
@@ -132,7 +132,7 @@ class Rest
 
         return $this;
     }
-    
+
     /**
      * @param array $headers
      *
@@ -144,7 +144,7 @@ class Rest
 
         return $this;
     }
-    
+
     /**
      * @param array $body
      *
@@ -160,14 +160,15 @@ class Rest
 
         return $this;
     }
-    
+
     /**
      * Turns on caching of response body for given time.
      *
      * @param int $time - Shelf-life of cached response in seconds
      *
-     * @return $this
      * @throws \Maestro\Exceptions\PostCachingException
+     *
+     * @return $this
      */
     public function cachable(int $time = 60)
     {
@@ -179,13 +180,14 @@ class Rest
 
         return $this;
     }
-    
+
     /**
      * Either sends the request or fetches a cached response body dependent on if caching is enabled.
      *
-     * @return $this
      * @throws \Maestro\Exceptions\NoUrlException
      * @throws \Maestro\Exceptions\NoMethodException
+     *
+     * @return $this
      */
     public function send()
     {
@@ -196,11 +198,12 @@ class Rest
         // Set the response from a Client Request
         return $this->sendRequest();
     }
-    
+
     /**
-     * @return mixed
      * @throws \Maestro\Exceptions\NoUrlException
      * @throws \Maestro\Exceptions\NoMethodException
+     *
+     * @return mixed
      */
     private function fetchCachedIfExists()
     {
@@ -229,31 +232,32 @@ class Rest
     {
         return time() + $this->cacheTime;
     }
-    
+
     /**
      * Sends the request and caches the response is caching is enabled.
      *
-     * @return $this
      * @throws \Maestro\Exceptions\NoUrlException
      * @throws \Maestro\Exceptions\NoMethodException
+     *
+     * @return $this
      */
     private function sendRequest()
     {
         if (!$this->method) {
             throw new NoMethodException();
         }
-    
+
         if (!$this->url) {
             throw new NoUrlException();
         }
-    
+
         // GET method doesn't send a BODY
         $paramsToSend = [$this->method, $this->url.$this->endPoint];
-        
+
         if ($this->method !== 'GET') {
             $paramsToSend[] = $this->body;
         }
-        
+
         $request = new Request(...$paramsToSend);
 
         $this->response = $this->client->send($request);
