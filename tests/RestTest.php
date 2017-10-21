@@ -9,12 +9,15 @@
 namespace Maestro\Test;
 
 use GuzzleHttp\Client;
+use Maestro\Exceptions\NoMethodException;
+use Maestro\Exceptions\NoUrlException;
+use Maestro\Exceptions\PostCachingException;
 use Maestro\Rest;
 
 class RestTest extends TestCase
 {
     /**
-     * @var
+     * @var \Maestro\Rest
      */
     protected $restClass;
 
@@ -52,8 +55,8 @@ class RestTest extends TestCase
     public function testGetSetEndpoint()
     {
         $endpoint = 'endpoint';
-        $this->assertInstanceOf(Rest::class, $this->restClass->setEndpoint($endpoint));
-        $this->assertEquals($endpoint, $this->restClass->getEndpoint());
+        $this->assertInstanceOf(Rest::class, $this->restClass->setEndPoint($endpoint));
+        $this->assertEquals($endpoint, $this->restClass->getEndPoint());
     }
 
     /**
@@ -87,7 +90,6 @@ class RestTest extends TestCase
      */
     public function testSendGet()
     {
-        $url = 'https://www.google.com';
         $mock = \Mockery::mock(new Client());
         $mock->shouldReceive('send')
             ->times(1);
@@ -95,7 +97,7 @@ class RestTest extends TestCase
         $this->restClass = new Rest($mock);
 
         $url = 'https://www.google.com';
-        $response = $this->restClass
+        $this->restClass
             ->get()
             ->setUrl($url)
             ->send()
@@ -111,7 +113,7 @@ class RestTest extends TestCase
      */
     public function testSendNoMethod()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(NoMethodException::class);
         $this->restClass->send();
     }
 
@@ -122,7 +124,7 @@ class RestTest extends TestCase
      */
     public function testSendNoUrl()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(NoUrlException::class);
         $this->restClass->get()->send();
     }
 
@@ -219,7 +221,7 @@ class RestTest extends TestCase
 
     public function testPostRequestsNotCachable()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(PostCachingException::class);
         $rest = new Rest();
         $result = $rest->post()->cachable(60);
     }
