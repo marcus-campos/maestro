@@ -30,22 +30,34 @@ class Rest
 
     private $endPoint;
 
-    /** @var \Psr\Http\Message\ResponseInterface */
+    /**
+     * @var \Psr\Http\Message\ResponseInterface 
+     */
     private $response;
 
-    /** @var Client */
+    /**
+     * @var Client 
+     */
     private $client;
 
-    /** {boolean} Indicates if caching is turned on */
+    /**
+     * {boolean} Indicates if caching is turned on 
+     */
     protected $cachingEnabled = false;
 
-    /** {string} The response body as a string to make it cachable */
+    /**
+     * {string} The response body as a string to make it cachable 
+     */
     protected $responseBody;
 
-    /** {number} Time responses will be cached for (if caching is enabled) */
+    /**
+     * {number} Time responses will be cached for (if caching is enabled) 
+     */
     protected $cacheTime = 60;
 
-    /** {string} Used by APCu */
+    /**
+     * {string} Used by APCu 
+     */
     private $cacheKey = '';
 
     public function __construct($client = null)
@@ -282,9 +294,11 @@ class Rest
             $this->body
         );
 
-        $this->response = $this->client->sendAsync($request)->then(function ($response) {
-            return $response;
-        });
+        $this->response = $this->client->sendAsync($request)->then(
+            function ($response) {
+                return $response;
+            }
+        );
 
         $curl->tick();
 

@@ -7,4 +7,7 @@
  */
 namespace Maestro\Exceptions;
 
-abstract class MaestroException extends \Exception {}
+abstract class MaestroException extends \Exception
+{
+
+}

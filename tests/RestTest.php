@@ -192,9 +192,9 @@ class RestTest extends TestCase
     public function testNotCachableByDefault()
     {
         $result = $this->restClass->get()
-                    ->setUrl('http://api.example.com')
-                    ->setEndPoint('/horses')
-                    ->getCachingEnabled();
+            ->setUrl('http://api.example.com')
+            ->setEndPoint('/horses')
+            ->getCachingEnabled();
 
         $this->assertFalse($result);
     }
@@ -202,10 +202,10 @@ class RestTest extends TestCase
     public function testCachable()
     {
         $result = $this->restClass->get()
-                    ->setUrl('http://api.example.com')
-                    ->setEndPoint('/horses')
-                    ->cachable(60)
-                    ->getCachingEnabled();
+            ->setUrl('http://api.example.com')
+            ->setEndPoint('/horses')
+            ->cachable(60)
+            ->getCachingEnabled();
 
         $this->assertTrue($result);
     }
@@ -213,8 +213,8 @@ class RestTest extends TestCase
     public function testSetCacheTime()
     {
         $result = $this->restClass->get()
-                    ->cachable(360)
-                    ->getCacheTime();
+            ->cachable(360)
+            ->getCacheTime();
 
         $this->assertEquals($result, 360);
     }
