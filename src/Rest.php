@@ -16,7 +16,7 @@ use Maestro\Exceptions\NoUrlException;
 use Maestro\Exceptions\PostCachingException;
 use Maestro\Http\Methods;
 
-class Rest
+abstract class Rest
 {
     use Methods, CachingGetters;
 
