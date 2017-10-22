@@ -252,7 +252,7 @@ class Rest
         }
 
         // GET method doesn't send a BODY
-        $paramsToSend = [$this->method, $this->url.$this->endPoint];
+        $paramsToSend = [$this->method, $this->url.$this->endPoint, $this->headers];
 
         if ($this->method !== 'GET') {
             $paramsToSend[] = $this->body;
