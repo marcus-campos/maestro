@@ -255,7 +255,7 @@ class Rest
         $paramsToSend = [$this->method, $this->url.$this->endPoint, $this->headers];
 
         if ($this->method !== 'GET') {
-            $paramsToSend[] = $this->body;
+            $paramsToSend[] = json_encode($this->body);
         }
 
         $request = new Request(...$paramsToSend);
@@ -295,7 +295,7 @@ class Rest
             $this->method,
             $this->url.$this->endPoint,
             $this->headers,
-            $this->body
+            json_encode($this->body)
         );
 
         $this->response = $this->client->sendAsync($request)->then(
