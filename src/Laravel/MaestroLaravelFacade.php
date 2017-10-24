@@ -8,7 +8,7 @@ use Maestro\Rest;
 class MaestroLaravelFacade extends IlluminateFacade
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected static function getFacadeAccessor()
     {
