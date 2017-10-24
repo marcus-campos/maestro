@@ -2,7 +2,7 @@
 /**
  * User: marcus-campos
  * Date: 24/10/17
- * Time: 12:33
+ * Time: 12:33.
  */
 
 namespace Maestro\Cache;
@@ -57,7 +57,7 @@ trait Cache
     private function fetchCachedIfExists()
     {
         // Generate a key to use for caching
-        $this->cacheKey = md5($this->url . $this->endPoint);
+        $this->cacheKey = md5($this->url.$this->endPoint);
 
         // Set the response from APCu cache
         if (apcu_exists($this->cacheKey)) {
@@ -85,12 +85,12 @@ trait Cache
     private function cacheResponseBody()
     {
         if (method_exists($this->response, 'getBody')) {
-            $this->responseBody = (string)$this->response->getBody();
+            $this->responseBody = (string) $this->response->getBody();
         }
 
         if ($this->cachingEnabled && $this->response->getReasonPhrase() === 'OK') {
             $batch = [
-                'expires' => $this->makeCacheExpiryTime(),
+                'expires'      => $this->makeCacheExpiryTime(),
                 'responseBody' => $this->responseBody,
             ];
             apcu_store($this->cacheKey, $batch);
