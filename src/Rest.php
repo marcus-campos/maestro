@@ -316,6 +316,14 @@ class Rest
     {
         return $this->response;
     }
+    
+    /**
+     * @return int
+     */
+    public function status() : int
+    {
+        return $this->response->getStatusCode();
+    }
 
     /**
      * @return mixed
