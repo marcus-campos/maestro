@@ -318,6 +318,14 @@ class Rest
     }
 
     /**
+     * @return int
+     */
+    public function status() : int
+    {
+        return $this->response->getStatusCode();
+    }
+
+    /**
      * @return mixed
      */
     public function parse()
