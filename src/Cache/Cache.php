@@ -7,9 +7,6 @@
 
 namespace Maestro\Cache;
 
-
-use Maestro\CachingGetters;
-
 trait Cache
 {
     use CachingGetters;
