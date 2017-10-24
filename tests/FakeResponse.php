@@ -16,7 +16,7 @@ class FakeResponse
     {
         return $this->body;
     }
-    
+
     public function getStatusCode()
     {
         return 200;

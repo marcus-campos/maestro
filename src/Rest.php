@@ -147,7 +147,6 @@ class Rest
     }
 
 
-
     /**
      * Either sends the request or fetches a cached response body dependent on if caching is enabled.
      *
@@ -221,7 +220,7 @@ class Rest
     private function newRequest()
     {
         // GET method doesn't send a BODY
-        $paramsToSend = [$this->method, $this->url.$this->endPoint, $this->headers];
+        $paramsToSend = [$this->method, $this->url . $this->endPoint, $this->headers];
 
         if ($this->method !== 'GET') {
             $paramsToSend[] = $this->body;
@@ -229,6 +228,7 @@ class Rest
 
         return new Request(...$paramsToSend);
     }
+
     /**
      * @return mixed
      */
@@ -240,7 +240,7 @@ class Rest
     /**
      * @return int
      */
-    public function status() : int
+    public function status(): int
     {
         return $this->response->getStatusCode();
     }
