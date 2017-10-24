@@ -7,6 +7,8 @@
 
 namespace Maestro\Cache;
 
+use Maestro\Exceptions\PostCachingException;
+
 trait Cache
 {
     use CachingGetters;
