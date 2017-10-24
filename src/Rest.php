@@ -316,7 +316,7 @@ class Rest
     {
         return $this->response;
     }
-    
+
     /**
      * @return int
      */
