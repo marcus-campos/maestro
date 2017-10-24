@@ -24,5 +24,12 @@
         "psr-4": {
             "Maestro\\Test\\": "tests"
         }
+    },
+    "extra": {
+        "laravel": {
+            "aliases": {
+                "Maestro": "Maestro\\Laravel\\Facade"
+            }
+        }
     }
 }
