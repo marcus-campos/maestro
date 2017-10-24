@@ -188,8 +188,8 @@ class RestTest extends TestCase
     {
         $mock = \Mockery::mock(new Client());
         $mock->shouldReceive('send')
-             ->times(1)
-             ->andReturn(new FakeResponse());
+            ->times(1)
+            ->andReturn(new FakeResponse());
 
         $this->restClass = new Rest($mock);
 
