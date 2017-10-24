@@ -5,7 +5,7 @@ namespace Maestro\Laravel;
 use Illuminate\Support\Facades\Facade as IlluminateFacade;
 use Maestro\Rest;
 
-class Facade extends IlluminateFacade
+class MaestroLaravelFacade extends IlluminateFacade
 {
     /**
      * {@inheritDoc}

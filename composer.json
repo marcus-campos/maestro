@@ -28,7 +28,7 @@
     "extra": {
         "laravel": {
             "aliases": {
-                "Maestro": "Maestro\\Laravel\\Facade"
+                "Maestro": "Maestro\\Laravel\\MaestroLaravelFacade"
             }
         }
     }
