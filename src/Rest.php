@@ -10,10 +10,14 @@ namespace Maestro;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use Maestro\Exceptions\NoMethodException;
 use Maestro\Exceptions\NoUrlException;
 use Maestro\Exceptions\PostCachingException;
+use GuzzleHttp\Psr7\Response;
 use Maestro\Http\Methods;
 
 class Rest
@@ -59,6 +63,8 @@ class Rest
      * {string} Used by APCu.
      */
     private $cacheKey = '';
+
+    private const MAX_RETRIES = 5;
 
     public function __construct($client = null)
     {
@@ -259,7 +265,41 @@ class Rest
         }
 
         $request = new Request(...$paramsToSend);
+        $handler = HandlerStack::create();
+        $handler->push(Middleware::retry(
+            function (
+                $retries,
+                Request $request,
+                Response $response = null,
+                RequestException $exception = null
+            ) {
+                // if we failed more than MAX_RETRIES times, we give up
+                if ($retries >= self::MAX_RETRIES) {
+                    return false;
+                }
 
+                // if we failed to establish a connection, we retry
+                if ($exception instanceof ConnectException) {
+                    return true;
+                }
+
+                if ($response) {
+                    // if there was an server error, we retry
+                    if ($response->getStatusCode() >= 500)
+                        return true;
+                }
+
+                // nothing did help, finally give up
+                return false;
+            }
+        ));
+        $config = [
+            'handler' => $handler
+        ];
+        if($this->client !== null){
+            $config = array_merge($this->client->getConfig(),$config);
+        }
+        $this->setClient(new Client($config));
         $this->response = $this->client->send($request);
 
         $this->cacheResponseBody();
@@ -289,8 +329,34 @@ class Rest
     {
         $curl = new CurlMultiHandler();
         $handler = HandlerStack::create($curl);
-        $this->setClient(new Client(['handler' => $handler]));
+        $handler->push(Middleware::retry(
+            function (
+                $retries,
+                Request $request,
+                Response $response = null,
+                RequestException $exception = null
+            ) {
+                // if we failed more than MAX_RETRIES times, we give up
+                if ($retries >= self::MAX_RETRIES) {
+                    return false;
+                }
 
+                // if we failed to establish a connection, we retry
+                if ($exception instanceof ConnectException) {
+                    return true;
+                }
+
+                if ($response) {
+                    // if there was an server error, we retry
+                    if ($response->getStatusCode() >= 500)
+                        return true;
+                }
+
+                // nothing did help, finally give up
+                return false;
+            }
+        ));
+        $this->setClient(new Client(['handler' => $handler]));
         $request = new Request(
             $this->method,
             $this->url.$this->endPoint,
