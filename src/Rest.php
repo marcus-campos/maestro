@@ -8,16 +8,16 @@
 namespace Maestro;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Handler\CurlMultiHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\CurlMultiHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Maestro\Exceptions\NoMethodException;
 use Maestro\Exceptions\NoUrlException;
 use Maestro\Exceptions\PostCachingException;
-use GuzzleHttp\Psr7\Response;
 use Maestro\Http\Methods;
 
 class Rest
@@ -268,7 +268,7 @@ class Rest
         $handler = HandlerStack::create();
         $handler->push(Middleware::retry(self::getRetryDecider()));
         $config = [
-            'handler' => $handler
+            'handler' => $handler,
         ];
         if ($this->client !== null) {
             $config = array_merge($this->client->getConfig(), $config);
