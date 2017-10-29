@@ -353,13 +353,14 @@ class Rest
         return $this;
     }
 
-    private static function getRetryDecider(){
-        return function(
-        $retries,
-        Request $request,
-        Response $response = null,
-        RequestException $exception = null
-    ) {
+    private static function getRetryDecider()
+    {
+        return function (
+            $retries,
+            Request $request,
+            Response $response = null,
+            RequestException $exception = null
+        ) {
             $returnValue = null;
             // if we failed more than MAX_RETRIES times, we give up
             if ($retries >= self::MAX_RETRIES) {
@@ -373,13 +374,14 @@ class Rest
 
             if ($response && $returnValue === null) {
                 // if there was an server error, we retry
-                $responseCode = $response->getStatusCode();
-                if ($responseCode >= 500)
+                if ($response->getStatusCode() >= 500) {
                     $returnValue = true;
+                }
             }
-            if ($returnValue === null)
+            if ($returnValue === null) {
                 // nothing did help, finally give up
                 $returnValue = false;
+            }
 
             return $returnValue;
         };
