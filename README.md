@@ -1,4 +1,4 @@
-[![StyleCI](https://styleci.io/repos/106752684/shield?branch=master)](https://styleci.io/repos/106752684) [![Maintainability](https://api.codeclimate.com/v1/badges/0c615c480aa201e6214f/maintainability)](https://codeclimate.com/github/marcus-campos/maestro/maintainability)
+[![Build Status](https://travis-ci.org/marcus-campos/maestro.svg?branch=analysis-qJNaEE)](https://travis-ci.org/marcus-campos/maestro) [![StyleCI](https://styleci.io/repos/106752684/shield?branch=master)](https://styleci.io/repos/106752684) [![Maintainability](https://api.codeclimate.com/v1/badges/0c615c480aa201e6214f/maintainability)](https://codeclimate.com/github/marcus-campos/maestro/maintainability)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 # Maestro
@@ -144,8 +144,29 @@ Assoc way
          ])
          ->send()
          ->assoc()
-         ->parse()
-         ->name;
+         ->parse()['name'];
+ }
+```
+
+Get response status
+```php
+ public function postNotification()
+ {
+     $response = $this
+          ->get()
+          ->setEndPoint('package/')
+          ->headers([
+              'Content-Type' => 'application/json'
+          ])
+          ->body([
+              'message' => 'Tanks for all.',
+              'id' => [1]
+          ])
+          ->send();
+
+          if($response->status() === 200) {
+                $db->save($response->parse()); // any code to work with response body
+          }
  }
 ```
 

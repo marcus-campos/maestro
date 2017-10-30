@@ -182,6 +182,28 @@ class RestTest extends TestCase
     }
 
     /**
+     * Method testStatus.
+     */
+    public function testStatus()
+    {
+        $mock = \Mockery::mock(new Client());
+        $mock->shouldReceive('send')
+            ->times(1)
+            ->andReturn(new FakeResponse());
+
+        $this->restClass = new Rest($mock);
+
+        $url = 'https://www.google.com';
+        $status = $this->restClass
+            ->get()
+            ->setUrl($url)
+            ->send()
+            ->status();
+
+        $this->assertEquals(200, $status);
+    }
+
+    /**
      * Method testAssoc.
      */
     public function testAssoc()
