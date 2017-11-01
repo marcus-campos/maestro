@@ -8,9 +8,13 @@
 namespace Maestro;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Maestro\Cache\Cache;
 use Maestro\Exceptions\NoMethodException;
 use Maestro\Exceptions\NoUrlException;
@@ -39,6 +43,11 @@ class Rest
      * @var Client
      */
     private $client;
+
+    /**
+     * @var int how many times should we retry before we give up
+     */
+    const MAX_RETRIES = 5;
 
     /**
      * {string} The response body as a string to make it cachable.
@@ -198,6 +207,7 @@ class Rest
     {
         $curl = new CurlMultiHandler();
         $handler = HandlerStack::create($curl);
+        $handler->push(Middleware::retry(self::getRetryDecider()));
         $this->setClient(new Client(['handler' => $handler]));
 
         $request = $this->newRequest();
@@ -264,5 +274,39 @@ class Rest
         $this->assoc = true;
 
         return $this;
+    }
+
+    private static function getRetryDecider()
+    {
+        return function (
+            $retries,
+            Request $request,
+            Response $response = null,
+            RequestException $exception = null
+        ) {
+            $returnValue = null;
+            // if we failed more than MAX_RETRIES times, we give up
+            if ($retries >= self::MAX_RETRIES) {
+                $returnValue = false;
+            }
+
+            // if we failed to establish a connection, we retry
+            if ($exception instanceof ConnectException && $returnValue === null) {
+                $returnValue = true;
+            }
+
+            if ($response && $returnValue === null) {
+                // if there was an server error, we retry
+                if ($response->getStatusCode() >= 500) {
+                    $returnValue = true;
+                }
+            }
+            if ($returnValue === null) {
+                // nothing did help, finally give up
+                $returnValue = false;
+            }
+
+            return $returnValue;
+        };
     }
 }
