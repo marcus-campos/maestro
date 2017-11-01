@@ -45,6 +45,11 @@ class Rest
     private $client;
 
     /**
+     * @var int how many times should we retry before we give up
+     */
+    const MAX_RETRIES = 5;
+
+    /**
      * {string} The response body as a string to make it cachable.
      */
     protected $responseBody;
