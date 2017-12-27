@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/marcus-campos/maestro.svg?branch=analysis-qJNaEE)](https://travis-ci.org/marcus-campos/maestro) [![StyleCI](https://styleci.io/repos/106752684/shield?branch=master)](https://styleci.io/repos/106752684) [![Maintainability](https://api.codeclimate.com/v1/badges/0c615c480aa201e6214f/maintainability)](https://codeclimate.com/github/marcus-campos/maestro/maintainability)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-# Maestro
+# Maestro - Http Client for PHP
 
-A light client built on [Guzzle](http://docs.guzzlephp.org/en/latest/) that simplifies the way you work with micro-services. It is based on method definitions and parameters for your URLs.
+A light client built on top of [Guzzle](http://docs.guzzlephp.org/en/latest/), that simplifies the way you work with micro-services. It is based on method definitions and parameters for your URLs.
 
 # Requirements
 
@@ -12,16 +12,25 @@ A light client built on [Guzzle](http://docs.guzzlephp.org/en/latest/) that simp
 
 # Installation
 
-Composer way
+### Composer way
 
 ```
 composer require marcus-campos/maestro
 ```
 
-Or add manually to your composer.json:
+### Or add manually to your composer.json:
 
 ```
 "marcus-campos/maestro": "dev-master"
+```
+
+## If you are using laravel
+
+### Service Provider (Optional on Laravel 5.5)
+Once Composer has installed or updated your packages you need add aliases or register you packages into Laravel. Open up config/app.php and find the aliases key and add:
+
+```
+'Maestro' => Maestro\Laravel\MaestroLaravelFacade::class,
 ```
 
 # Running the test suite
@@ -106,12 +115,10 @@ class Products extends Rest
 By default the returns is a `StdClass`, which gives you the freedom to treat the data the way you want. See the examples:
 
 
-The way of Laravel
-
 ```php
  public function getProducts()
  {
-     return collect(
+     return
          $this
          ->get()
          ->setEndPoint('products')
@@ -122,13 +129,12 @@ The way of Laravel
              'ids' => [1,2,3,4,5]
          ])
          ->send()
-         ->parse());
+         ->parse();
  }
 ```
 
-You can choose assoc return.
+You can choose assoc return. The return will be an array.
 
-Assoc way
 ```php
  public function postNotification()
  {
