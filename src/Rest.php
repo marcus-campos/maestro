@@ -265,6 +265,15 @@ class Rest
 
         return json_decode($this->responseBody);
     }
+    
+     /**
+     * Only for laravel
+     * @return mixed
+     */
+    public function collect()
+    {
+        return collect(json_decode($this->responseBody, true));
+    }
 
     /**
      * @return $this
