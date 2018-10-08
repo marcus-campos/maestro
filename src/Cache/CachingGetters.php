@@ -4,6 +4,9 @@ namespace Maestro\Cache;
 
 trait CachingGetters
 {
+    /**
+    * Get if cache is enabled
+    */
     public function getCachingEnabled()
     {
         return $this->cachingEnabled;
